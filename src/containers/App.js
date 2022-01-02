@@ -19,9 +19,12 @@ class App extends Component {
     most_played: "",
     number_games_played: "",
     msg: "wait a second ...",
+    name: "",
+    element: "",
   };
   /* get calculation from laravel api : ratio,number of games played,most played */
   getHistory = async (name) => {
+    this.setState({ name: name });
     this.setState({ msg: "wait a second ..." });
     const response = await axios.get(
       "http://localhost/server_side/public/api/getHistory/" + name
@@ -31,6 +34,36 @@ class App extends Component {
     this.setState({ number_games_played: response.data.count });
     this.setState({ msg: "" });
     this.setState({ most_played: response.data.most_played });
+    var element = "";
+    if (this.state.most_played == "Paper") {
+      element = (
+        <i
+          className="material-icons"
+          style={{ fontSize: "80px", marginTop: "10px" }}
+        >
+          description
+        </i>
+      );
+    } else if (this.state.most_played == "Scissors") {
+      element = (
+        <i
+          className="material-icons"
+          style={{ fontSize: "80px", marginTop: "10px" }}
+        >
+          content_cut
+        </i>
+      );
+    } else if (this.state.most_played == "Rock") {
+      element = (
+        <i
+          className="material-icons"
+          style={{ fontSize: "80px", marginTop: "10px" }}
+        >
+          all_out
+        </i>
+      );
+    }
+    this.setState({ element: element });
   };
   /* */
   // showing loading
@@ -259,34 +292,82 @@ class App extends Component {
     this.getGamesTies("/rps/history"); // display first page ties (rendering games)
   }
   render() {
-    console.log("data :", this.state.games);
-    console.log("array of navigation :", this.state.navigation_array);
+    // console.log("data :", this.state.games);
+    // console.log("array of navigation :", this.state.navigation_array);
+    var content = "";
+    if (this.state.msg == "") {
+      content = (
+        <div>
+          <div className="row">
+            <div className="col-md-4" style={{ textAlign: "center" }}>
+              Winning Ratio
+              <i
+                className="material-icons"
+                style={{ fontSize: "80px", marginTop: "10px" }}
+              >
+                emoji_events
+              </i>
+              <div>{this.state.winning_ratio}</div>
+            </div>
+            <div className="col-md-4" style={{ textAlign: "center" }}>
+              Number Of Games
+              <i
+                className="material-icons"
+                style={{ fontSize: "80px", marginTop: "10px" }}
+              >
+                format_list_numbered
+              </i>
+              <div>{this.state.number_games_played}</div>
+            </div>
+            <div className="col-md-4" style={{ textAlign: "center" }}>
+              Most Element Played
+              {this.state.element}
+              <div>{this.state.most_played}</div>
+            </div>
+          </div>{" "}
+          <Games_list
+            type=""
+            games={this.state.history}
+            displayPlayerHistoryPlayerA={this.displayPlayerHistoryPlayerA}
+            displayPlayerHistoryPlayerB={this.displayPlayerHistoryPlayerB}
+          />
+        </div>
+      );
+    }
+    var back = "";
+    if (this.state.page !== 0) {
+      back = (
+        <i
+          className="material-icons"
+          style={{ cursor: "pointer" }}
+          onClick={() => this.navigate_back(this.state.prev)}
+        >
+          arrow_back_ios
+        </i>
+      );
+    }
     return (
-      <div className="row">
+      <div className="row" style={{ backgroundColor: "#eee" }}>
         <div className="col-md-12">
           <div id="loading" style={{ textAlign: "center" }}></div>
         </div>
-        <div class="row justify-content-center">
-          <div className="col-md-3">
-            <i
-              className="material-icons"
-              style={{ cursor: "pointer" }}
-              onClick={() => this.navigate_back(this.state.prev)}
-            >
-              arrow_back_ios
-            </i>
-            Previous page {this.state.page}
-          </div>
-          <div className="col-md-3">
-            <i
-              className="material-icons"
-              style={{ cursor: "pointer" }}
-              onClick={() => this.next(this.state.previous_games)}
-            >
-              arrow_forward_ios
-            </i>
-            Next page
-          </div>
+        <div className="col-md-12" style={{ textAlign: "center" }}>
+          <table style={{ width: "50%" }}>
+            <tr>
+              <td>{back}</td>
+              <td> page {this.state.page}</td>
+              <td>
+                {" "}
+                <i
+                  className="material-icons"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => this.next(this.state.previous_games)}
+                >
+                  arrow_forward_ios
+                </i>
+              </td>
+            </tr>
+          </table>
         </div>
         <div className="col-md-12">
           {this.state.ties}
@@ -303,27 +384,27 @@ class App extends Component {
         >
           <div className="modal-dialog">
             <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title" id="exampleModalLabel">
-                  Player
+              <div className="modal-header" style={{ textAlign: "center" }}>
+                <i className="material-icons" style={{ fontSize: "80px" }}>
+                  person
+                </i>
+                <h5
+                  className="modal-title"
+                  id="exampleModalLabel"
+                  style={{
+                    textAlign: "center",
+                    color: "grey",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {this.state.name}
                 </h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  data-mdb-dismiss="modal"
-                  aria-label="Close"
-                />
               </div>
               <div
                 className="modal-body"
                 style={{ overflowY: " scroll", height: "20vw" }}
               >
-                <Games_list
-                  type=""
-                  games={this.state.history}
-                  displayPlayerHistoryPlayerA={this.displayPlayerHistoryPlayerA}
-                  displayPlayerHistoryPlayerB={this.displayPlayerHistoryPlayerB}
-                />
+                {content}
                 <div style={{ textAlign: "center", color: "#a8cdff" }}>
                   {this.state.msg}
                 </div>
