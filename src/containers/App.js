@@ -22,6 +22,8 @@ class App extends Component {
       "http://localhost/server_side/public/api/getHistory/" + name
     );
     this.setState({ history: response.data.count });
+    var modal = document.getElementById("exampleModal");
+    modal.style.display = "block";
     console.log(" history laravel:", this.state.history);
     console.log(" games result :", response.data.result);
   };
@@ -107,7 +109,6 @@ class App extends Component {
           games={this.state.games_ties}
           displayPlayerHistoryPlayerA={this.displayPlayerHistoryPlayerA}
           displayPlayerHistoryPlayerB={this.displayPlayerHistoryPlayerB}
-          onDelete={this.onDelete}
         />
       </div>
     );
@@ -133,7 +134,7 @@ class App extends Component {
     this.setState({ old_games: c2 });
   }
   /* navigate to the next page */
-  next = async (another_page) => {
+  next = (another_page) => {
     this.state.number_page = this.state.number_page + 1;
     this.displayLoading();
     this.setState({ page: this.state.page + 1 });
@@ -141,10 +142,12 @@ class App extends Component {
     this.getGamesTies(another_page);
   };
   /* navigate to the previous page */
-  navigate_back = async (another_page) => {
+  navigate_back = (another_page) => {
     this.setState({ page: this.state.page - 1 });
     var current_page = this.state.navigation_array.indexOf(another_page);
     var previous = this.state.navigation_array[current_page - 1];
+    console.log("current_page:", current_page);
+    console.log("previous:", current_page);
     this.displayGames(previous);
     this.getGamesTies(previous);
   };
@@ -159,8 +162,8 @@ class App extends Component {
     if (this.state.navigation_array.indexOf(another_page) === -1) {
       array.push(another_page);
       this.setState({ navigation_array: array });
-      this.setState({ prev: another_page });
     }
+    this.setState({ prev: another_page });
     var all_games = [];
     var all_result = results["data"];
 
@@ -258,6 +261,44 @@ class App extends Component {
           <div style={{ display: "flex" }}>
             {this.state.ties}
             {this.state.old_games}
+          </div>
+        </div>
+
+        {/* Modal */}
+        <div
+          className="modal fade"
+          id="exampleModal"
+          tabIndex={-1}
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="exampleModalLabel">
+                  Modal title
+                </h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-mdb-dismiss="modal"
+                  aria-label="Close"
+                />
+              </div>
+              <div className="modal-body">...</div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  data-mdb-dismiss="modal"
+                >
+                  Close
+                </button>
+                <button type="button" className="btn btn-primary">
+                  Save changes
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
