@@ -18,15 +18,18 @@ class App extends Component {
     winning_ratio: null,
     most_played: "",
     number_games_played: "",
+    msg: "wait a second ...",
   };
   /* get calculation from laravel api : ratio,number of games played,most played */
   getHistory = async (name) => {
+    this.setState({ msg: "wait a second ..." });
     const response = await axios.get(
       "http://localhost/server_side/public/api/getHistory/" + name
     );
     this.setState({ history: response.data.games_played });
     this.setState({ winning_ratio: response.data.ratio });
     this.setState({ number_games_played: response.data.count });
+    this.setState({ msg: "" });
     this.setState({ most_played: response.data.most_played });
   };
   /* */
@@ -321,18 +324,9 @@ class App extends Component {
                   displayPlayerHistoryPlayerA={this.displayPlayerHistoryPlayerA}
                   displayPlayerHistoryPlayerB={this.displayPlayerHistoryPlayerB}
                 />
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  data-mdb-dismiss="modal"
-                >
-                  Close
-                </button>
-                <button type="button" className="btn btn-primary">
-                  Save changes
-                </button>
+                <div style={{ textAlign: "center", color: "#a8cdff" }}>
+                  {this.state.msg}
+                </div>
               </div>
             </div>
           </div>

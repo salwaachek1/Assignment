@@ -24,7 +24,8 @@ class Games_list extends Component {
             backgroundColor: "#a8cdff",
             width: "100%",
             padding: "10px",
-            margin: "10px",
+            marginTop: "10px",
+            marginBottom: "10px",
           }}
         >
           {title}
