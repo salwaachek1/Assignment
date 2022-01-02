@@ -14,16 +14,20 @@ class App extends Component {
     games_ties: [],
     previous_games: "",
     previous: "",
-    history: "",
+    history: [],
+    winning_ratio: null,
+    most_played: "",
+    number_games_played: "",
   };
   /* get calculation from laravel api : ratio,number of games played,most played */
   getHistory = async (name) => {
     const response = await axios.get(
       "http://localhost/server_side/public/api/getHistory/" + name
     );
-    this.setState({ history: response.data.count });
-    console.log(" history laravel:", this.state.history);
-    console.log(" games result :", response.data.result);
+    this.setState({ history: response.data.games_played });
+    this.setState({ winning_ratio: response.data.ratio });
+    this.setState({ number_games_played: response.data.count });
+    this.setState({ most_played: response.data.most_played });
   };
   /* */
   // showing loading
@@ -39,10 +43,12 @@ class App extends Component {
   }
   displayPlayerHistoryPlayerA = (name) => {
     // this.displayPlayerHistory(name); //this is if we did calculation of games on the client side
+    this.setState({ history: [] });
     this.getHistory(name);
   };
   displayPlayerHistoryPlayerB = (name) => {
     // this.displayPlayerHistory(name); //this is if we did calculation of games on the client side
+    this.setState({ history: [] });
     this.getHistory(name);
   };
 
@@ -305,7 +311,17 @@ class App extends Component {
                   aria-label="Close"
                 />
               </div>
-              <div className="modal-body">...</div>
+              <div
+                className="modal-body"
+                style={{ overflowY: " scroll", height: "20vw" }}
+              >
+                <Games_list
+                  type=""
+                  games={this.state.history}
+                  displayPlayerHistoryPlayerA={this.displayPlayerHistoryPlayerA}
+                  displayPlayerHistoryPlayerB={this.displayPlayerHistoryPlayerB}
+                />
+              </div>
               <div className="modal-footer">
                 <button
                   type="button"
