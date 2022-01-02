@@ -22,8 +22,6 @@ class App extends Component {
       "http://localhost/server_side/public/api/getHistory/" + name
     );
     this.setState({ history: response.data.count });
-    var modal = document.getElementById("exampleModal");
-    modal.style.display = "block";
     console.log(" history laravel:", this.state.history);
     console.log(" games result :", response.data.result);
   };
@@ -96,14 +94,15 @@ class App extends Component {
     const loader = document.querySelector("#loading");
     loader.classList.remove("display");
     const c1 = (
-      <div className="col-md-6">
+      <div
+        className="col-md-6"
+        style={{
+          overflowY: " scroll",
+          height: "40vw",
+          border: "1px solid #949A9D",
+        }}
+      >
         {" "}
-        <a
-          style={{ cursor: "pointer" }}
-          onClick={() => this.navigate_back(this.state.prev)}
-        >
-          Previous page {this.state.page}
-        </a>
         <Games_list
           type="ties"
           games={this.state.games_ties}
@@ -115,13 +114,14 @@ class App extends Component {
 
     console.log("cursor :", this.state.games_ties.cursor);
     const c2 = (
-      <div className="col-md-6">
-        <a
-          style={{ cursor: "pointer" }}
-          onClick={() => this.next(this.state.previous_games)}
-        >
-          Next page
-        </a>
+      <div
+        className="col-md-6"
+        style={{
+          overflowY: " scroll",
+          height: "40vw",
+          border: "1px solid #949A9D",
+        }}
+      >
         <Games_list
           type=""
           games={this.state.games}
@@ -257,17 +257,37 @@ class App extends Component {
         <div className="col-md-12">
           <div id="loading" style={{ textAlign: "center" }}></div>
         </div>
-        <div className="col-md-12">
-          <div style={{ display: "flex" }}>
-            {this.state.ties}
-            {this.state.old_games}
+        <div class="row justify-content-center">
+          <div className="col-md-3">
+            <i
+              className="material-icons"
+              style={{ cursor: "pointer" }}
+              onClick={() => this.navigate_back(this.state.prev)}
+            >
+              arrow_back_ios
+            </i>
+            Previous page {this.state.page}
           </div>
+          <div className="col-md-3">
+            <i
+              className="material-icons"
+              style={{ cursor: "pointer" }}
+              onClick={() => this.next(this.state.previous_games)}
+            >
+              arrow_forward_ios
+            </i>
+            Next page
+          </div>
+        </div>
+        <div className="col-md-12">
+          {this.state.ties}
+          {this.state.old_games}
         </div>
 
         {/* Modal */}
         <div
           className="modal fade"
-          id="exampleModal"
+          id="myModal"
           tabIndex={-1}
           aria-labelledby="exampleModalLabel"
           aria-hidden="true"
@@ -276,7 +296,7 @@ class App extends Component {
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title" id="exampleModalLabel">
-                  Modal title
+                  Player
                 </h5>
                 <button
                   type="button"

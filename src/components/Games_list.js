@@ -29,7 +29,7 @@ class Games_list extends Component {
         >
           {title}
         </div>
-        <table className="ui celled table" style={{ width: "50%" }}>
+        <table className="ui celled table" style={{ width: "100%" }}>
           <thead>
             <th>ID Game</th>
             <th>winner</th>

@@ -52,11 +52,20 @@ class Game_list_item extends Component {
         <td style={{ textAlign: "center" }}> {gameId}</td>
         <td>{type}</td>
         <td>
-          <a href="#" onClick={this.displayPlayerHistoryPlayerA}>
+          <a
+            href="#"
+            onClick={this.displayPlayerHistoryPlayerA}
+            data-toggle="modal"
+            data-target="#myModal"
+          >
             {playerA.name}
           </a>
         </td>
-        <td style={{ textAlign: "center" }}>
+        <td
+          style={{ textAlign: "center" }}
+          data-toggle="modal"
+          data-target="#myModal"
+        >
           <a href="#" onClick={this.displayPlayerHistoryPlayerB}>
             {playerB.name}
           </a>
