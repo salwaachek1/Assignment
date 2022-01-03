@@ -27,7 +27,7 @@ class App extends Component {
     this.setState({ name: name });
     this.setState({ msg: "wait a second ..." });
     const response = await axios.get(
-      "http://localhost/server_side/public/api/getHistory/" + name
+      "http://localhost/Assignment-API-master/public/api/getHistory/" + name
     );
     this.setState({ history: response.data.games_played });
     this.setState({ winning_ratio: response.data.ratio });
